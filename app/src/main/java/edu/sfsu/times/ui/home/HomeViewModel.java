@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import edu.sfsu.times.model.DataModel;
-import edu.sfsu.times.model.DataModelSingleton;
+import edu.sfsu.times.model.DataModelViewModel;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -21,17 +21,22 @@ public class HomeViewModel extends ViewModel {
 
     private final MutableLiveData<ArrayList<DataModel>> data;
 
-    private final DataModelSingleton dms;
     private final ArrayList<DataModel> model;
 
     public HomeViewModel() {
         String SOURCES = "bbc-news";
+        String QUERY = "facebook";
 
         data = new MutableLiveData<>();
-        dms = DataModelSingleton.getInstance();
+        DataModelViewModel dms = DataModelViewModel.getInstance();
         model = dms.getData();
+        /* *
+         * https://newsapi.org/v2/everything?q=bitcoin&apiKey=6e5104549c7f49b0b6e2ff7a036b9939
+         * https://newsapi.org/v2/everything?q=facebook&apiKey=6e5104549c7f49b0b6e2ff7a036b9939
+         * https://newsapi.org/v2/top-headlines?sources=" + SOURCES + "&apiKey=6a5b4f0943e447a092cc59f7fbe690ef
+         */
 
-        new ViewModelAsyncTask().execute("https://newsapi.org/v2/top-headlines?sources=" + SOURCES + "&apiKey=6a5b4f0943e447a092cc59f7fbe690ef");
+        new ViewModelAsyncTask().execute("https://newsapi.org/v2/everything?q=" + QUERY + "&apiKey=6e5104549c7f49b0b6e2ff7a036b9939");
     }
 
     public LiveData<ArrayList<DataModel>> getData() {

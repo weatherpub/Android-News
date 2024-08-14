@@ -2,16 +2,16 @@ package edu.sfsu.times.model;
 
 import java.util.ArrayList;
 
-public class DataModelSingleton {
-    private static final DataModelSingleton obj = new DataModelSingleton();
+public class DataModelViewModel {
+    private static final DataModelViewModel obj = new DataModelViewModel();
 
     private final ArrayList<DataModel> dataModel;
 
-    private DataModelSingleton() {
+    private DataModelViewModel() {
         dataModel = new ArrayList<>();
     }
 
-    public static DataModelSingleton getInstance() {
+    public static DataModelViewModel getInstance() {
         return obj;
     }
 

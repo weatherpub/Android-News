@@ -1,7 +1,6 @@
 package edu.sfsu.times.model;
 
 public class DataModel {
-    private final String id;
     private final String name;
     private final String author;
     private final String title;
@@ -11,8 +10,7 @@ public class DataModel {
     private final String publishedAt;
     private final String content;
 
-    public DataModel(String id, String name, String author, String title, String description, String url, String urlToImage, String publishedAt, String content) {
-        this.id = id;
+    public DataModel(String name, String author, String title, String description, String url, String urlToImage, String publishedAt, String content) {
         this.name = name;
         this.author = author;
         this.title = title;
@@ -21,10 +19,6 @@ public class DataModel {
         this.urlToImage = urlToImage;
         this.publishedAt = publishedAt;
         this.content = content;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getName() {

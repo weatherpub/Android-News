@@ -1,55 +1,45 @@
 package edu.sfsu.times.ui.home;
-
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-
+import java.util.ArrayList;
+import edu.sfsu.times.model.DataModel;
+import edu.sfsu.times.model.DataModelSingleton;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 public class HomeViewModel extends ViewModel {
 
-    private final MutableLiveData<String> mText;
+    private final MutableLiveData<ArrayList<DataModel>> data;
+
+    private final DataModelSingleton dms;
+    private final ArrayList<DataModel> model;
 
     public HomeViewModel() {
         String SOURCES = "bbc-news";
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+
+        data = new MutableLiveData<>();
+        dms = DataModelSingleton.getInstance();
+        model = dms.getData();
 
         new ViewModelAsyncTask().execute("https://newsapi.org/v2/top-headlines?sources=" + SOURCES + "&apiKey=6a5b4f0943e447a092cc59f7fbe690ef");
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<ArrayList<DataModel>> getData() {
+        return data;
     }
 
     // inner class
     public class ViewModelAsyncTask extends AsyncTask<String, Void, String> {
-
-        /*
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-        */
 
         @Override
         protected String doInBackground(String... param) {
@@ -72,23 +62,34 @@ public class HomeViewModel extends ViewModel {
             }
         }
 
-        /*
-        protected void publishProgress() {
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-        }
-        */
-
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Log.i("LOG", result);
-            Log.i("LOG", "onPostExecute(String s)");
+
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                JSONArray obj = jsonObject.getJSONArray("articles");
+
+                for(int i =  0; i < obj.length(); i++) {
+                    model.add(new DataModel(
+                            obj.getJSONObject(i).getJSONObject("source").getString("name"),
+                            obj.getJSONObject(i).getString("author"),
+                            obj.getJSONObject(i).getString("title"),
+                            obj.getJSONObject(i).getString("description"),
+                            obj.getJSONObject(i).getString("url"),
+                            obj.getJSONObject(i).getString("urlToImage"),
+                            obj.getJSONObject(i).getString("publishedAt"),
+                            obj.getJSONObject(i).getString("content")));
+                }
+
+                data.setValue(model); // populate the live data for the fragment
+
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
-
 /*
 @Override
 protected void onPostExecute(String result) { // onPostExecute - runs on the main thread.

@@ -3,19 +3,19 @@ package edu.sfsu.times.model;
 import java.util.ArrayList;
 
 public class DataModelSingleton {
+    private static final DataModelSingleton obj = new DataModelSingleton();
 
-    private final ArrayList<DataModel> model;
+    private final ArrayList<DataModel> dataModel;
 
-    // note the private constructor
     private DataModelSingleton() {
-        model = new ArrayList<>();
+        dataModel = new ArrayList<>();
     }
 
     public static DataModelSingleton getInstance() {
-        return new DataModelSingleton();
+        return obj;
     }
 
     public ArrayList<DataModel> getData() {
-        return model;
+        return dataModel;
     }
 }

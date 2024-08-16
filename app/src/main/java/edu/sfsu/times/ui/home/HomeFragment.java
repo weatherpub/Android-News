@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.Date;
 import androidx.annotation.NonNull;
@@ -16,11 +18,16 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 
 import edu.sfsu.times.adapter.RecyclerViewAdapter;
 import edu.sfsu.times.databinding.FragmentHomeBinding;
+import edu.sfsu.times.model.DataModel;
 
 public class HomeFragment extends Fragment {
 
@@ -37,57 +44,37 @@ public class HomeFragment extends Fragment {
 
         View root = binding.getRoot();
 
-        final RecyclerView recyclerView = binding.rvHomeFragment;
+        recyclerView = binding.rvHomeFragment;
 
         homeViewModel.getData().observe(getViewLifecycleOwner(), data -> {
-            // Write file to disk. Thread 1
-            // Add new thread here.
 
-            // This works, by writing data to disk.
-            try {
-                File file = new File(requireContext().getFilesDir(), fmt.format(new Date()) + "_home.txt");
-                PrintWriter printWriter = new PrintWriter(file);
+            /*
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        File file = new File(requireContext().getFilesDir(), fmt.format(new Date()) + "_home.txt");
+                        PrintWriter printWriter = new PrintWriter(file);
 
-                printWriter.write(data.get(0).getAuthor());
+                        Log.v("LOG", "Written to disk -> " + data);
 
-                printWriter.close();
+                        // this will only print the objects
+                        printWriter.write(data.toString());
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                        printWriter.close();
 
-            // Read file - thread 2
-            for(int j = 0; j < data.size(); j++) {
-                Log.v("LOG", data.get(j).getContent());
-            }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }).start();
+            */
 
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         });
 
         return root;
-
-        /*
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //File file = new File("_home.txt");
-
-                Log.i("LOG", binding.toString());
-                try {
-                    File file = new File(requireContext().getFilesDir(), fmt.format("_home.txt")); // new name
-                    //FileWriter fileWriter = new FileWriter(file);
-
-                    PrintWriter printWriter = new PrintWriter(file);
-                    //printWriter.write(result.toString());
-                    printWriter.write("I love white women");
-                    printWriter.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }).start();
-        */
     }
 
     @Override

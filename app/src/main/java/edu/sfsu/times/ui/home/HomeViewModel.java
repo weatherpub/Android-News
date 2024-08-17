@@ -1,13 +1,7 @@
 package edu.sfsu.times.ui.home;
-import static androidx.core.content.ContentProviderCompat.requireContext;
-
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -16,13 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Date;
 
-import edu.sfsu.times.MainActivity;
 import edu.sfsu.times.model.DataModel;
 import edu.sfsu.times.model.DataModelViewModel;
 import okhttp3.OkHttpClient;
@@ -91,6 +81,7 @@ public class HomeViewModel extends ViewModel {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONArray obj = jsonObject.getJSONArray("articles");
 
+                // Add new json objects to DataModel to supply the data variable; which is -> MutableLiveData<ArrayList<DataModel>>
                 for(int i =  0; i < obj.length(); i++) {
                     model.add(new DataModel(
                             obj.getJSONObject(i).getJSONObject("source").getString("name"),
@@ -103,7 +94,8 @@ public class HomeViewModel extends ViewModel {
                             obj.getJSONObject(i).getString("content")));
                 }
 
-                data.setValue(model); // populate the live data for the fragment
+                data.setValue(data.getValue());
+                //data.setValue(model); // populate the live data for the fragment
 
             } catch (JSONException e) {
                 throw new RuntimeException(e);

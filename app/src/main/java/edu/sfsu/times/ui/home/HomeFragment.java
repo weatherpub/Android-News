@@ -28,6 +28,7 @@ import java.io.IOException;
 import edu.sfsu.times.adapter.RecyclerViewAdapter;
 import edu.sfsu.times.databinding.FragmentHomeBinding;
 import edu.sfsu.times.model.DataModel;
+import edu.sfsu.times.sql.DatabaseHelper;
 
 public class HomeFragment extends Fragment {
 
@@ -69,6 +70,10 @@ public class HomeFragment extends Fragment {
                 }
             }).start();
             */
+
+            Log.i("LOG", "DatabaseHelper.numberOfObjects -> "  + DatabaseHelper.numberOfObjects);
+            Log.i("LOG", "DatabaseHelper.DB_NAME -> "  + DatabaseHelper.DB_NAME);
+            Log.i("LOG", "DatabaseHelper.DB_VERSION -> "  + DatabaseHelper.DB_VERSION);
 
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

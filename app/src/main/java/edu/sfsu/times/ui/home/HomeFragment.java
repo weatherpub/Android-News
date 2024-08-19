@@ -1,12 +1,18 @@
 package edu.sfsu.times.ui.home;
 
+import static edu.sfsu.times.sql.DatabaseHelper.insert;
+
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -25,6 +31,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 
+import edu.sfsu.times.MainActivity;
+import edu.sfsu.times.R;
 import edu.sfsu.times.adapter.RecyclerViewAdapter;
 import edu.sfsu.times.databinding.FragmentHomeBinding;
 import edu.sfsu.times.model.DataModel;
@@ -32,6 +40,7 @@ import edu.sfsu.times.sql.DatabaseHelper;
 
 public class HomeFragment extends Fragment {
 
+    // private ProgressBar spinner;
     private FragmentHomeBinding binding;
     private RecyclerView recyclerView;
 
@@ -47,34 +56,8 @@ public class HomeFragment extends Fragment {
 
         recyclerView = binding.rvHomeFragment;
 
+        // Update UI (RecyclerView)
         homeViewModel.getData().observe(getViewLifecycleOwner(), data -> {
-
-            /*
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        File file = new File(requireContext().getFilesDir(), fmt.format(new Date()) + "_home.txt");
-                        PrintWriter printWriter = new PrintWriter(file);
-
-                        Log.v("LOG", "Written to disk -> " + data);
-
-                        // this will only print the objects
-                        printWriter.write(data.toString());
-
-                        printWriter.close();
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }).start();
-            */
-
-            Log.i("LOG", "DatabaseHelper.numberOfObjects -> "  + DatabaseHelper.numberOfObjects);
-            Log.i("LOG", "DatabaseHelper.DB_NAME -> "  + DatabaseHelper.DB_NAME);
-            Log.i("LOG", "DatabaseHelper.DB_VERSION -> "  + DatabaseHelper.DB_VERSION);
-
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         });

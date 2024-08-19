@@ -1,6 +1,13 @@
 package edu.sfsu.times.ui.home;
+import static java.security.AccessController.getContext;
+import static edu.sfsu.times.sql.DatabaseHelper.insert;
+
+import android.app.ProgressDialog;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -13,8 +20,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import edu.sfsu.times.MainActivity;
 import edu.sfsu.times.model.DataModel;
 import edu.sfsu.times.model.DataModelViewModel;
+import edu.sfsu.times.sql.DatabaseHelper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -22,6 +31,7 @@ import okhttp3.Response;
 // singleton in disguise
 public class HomeViewModel extends ViewModel {
     private final MutableLiveData<ArrayList<DataModel>> data;
+
 
     private final ArrayList<DataModel> model;
 
@@ -38,7 +48,8 @@ public class HomeViewModel extends ViewModel {
          * https://newsapi.org/v2/top-headlines?sources=" + SOURCES + "&apiKey=6a5b4f0943e447a092cc59f7fbe690ef
          */
 
-        new ViewModelAsyncTask().execute("https://newsapi.org/v2/everything?q=" + QUERY + "&apiKey=6e5104549c7f49b0b6e2ff7a036b9939");
+        //new ViewModelAsyncTask().execute("https://newsapi.org/v2/everything?q=" + QUERY + "&apiKey=6e5104549c7f49b0b6e2ff7a036b9939");
+        new ViewModelAsyncTask().execute("https://newsapi.org/v2/top-headlines?sources=" + SOURCES + "&apiKey=6a5b4f0943e447a092cc59f7fbe690ef");
     }
 
     public LiveData<ArrayList<DataModel>> getData() {
@@ -50,6 +61,21 @@ public class HomeViewModel extends ViewModel {
      * even if they are declared private.
      */
     public class ViewModelAsyncTask extends AsyncTask<String, Void, String> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            // Log.i("LOG", "Get Context");
+
+            // progressDialog = new ProgressDialog(MainActivity.this);
+            /*
+            progressDialog.setMessage("Please Wait");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+            */
+        }
 
         @Override
         protected String doInBackground(String... param) {
@@ -72,12 +98,15 @@ public class HomeViewModel extends ViewModel {
             }
         }
 
+
         // this is the main ui
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
+
             try {
+                SQLiteDatabase sd = null;
                 JSONObject jsonObject = new JSONObject(result);
                 JSONArray obj = jsonObject.getJSONArray("articles");
 
@@ -93,11 +122,9 @@ public class HomeViewModel extends ViewModel {
                             obj.getJSONObject(i).getString("publishedAt"),
                             obj.getJSONObject(i).getString("content")));
                 }
-
                 data.setValue(data.getValue());
-                //data.setValue(model); // populate the live data for the fragment
-
-            } catch (JSONException e) {
+                //... or use data.setValue(model); to populate the liveData for the fragment
+            } catch (JSONException | SQLException e) {
                 throw new RuntimeException(e);
             }
         }

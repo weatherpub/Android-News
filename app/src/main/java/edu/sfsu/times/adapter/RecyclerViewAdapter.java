@@ -1,5 +1,7 @@
 package edu.sfsu.times.adapter;
 
+import static edu.sfsu.times.sql.DatabaseHelper.insert;
+
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;

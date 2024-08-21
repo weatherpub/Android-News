@@ -1,5 +1,5 @@
 [versions]
-agp = "8.5.0"
+agp = "8.5.2"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -13,6 +13,9 @@ navigationUi = "2.7.7"
 #
 okhttp = "4.12.0"
 picasso = "2.71828"
+activity = "1.9.1"
+lifecycle = "2.8.4"
+ext = "2.2.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -27,6 +30,9 @@ navigation-fragment = { group = "androidx.navigation", name = "navigation-fragme
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUi" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso" }
+activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+lifecycle = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "lifecycle"}
+ext = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "ext"}
 
 
 [plugins]

@@ -1,13 +1,10 @@
 package edu.sfsu.times.ui.home;
-import static java.security.AccessController.getContext;
-import static edu.sfsu.times.sql.DatabaseHelper.insert;
 
 import android.app.ProgressDialog;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ProgressBar;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -20,18 +17,25 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import edu.sfsu.times.MainActivity;
 import edu.sfsu.times.model.DataModel;
 import edu.sfsu.times.model.DataModelViewModel;
-import edu.sfsu.times.sql.DatabaseHelper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 // singleton in disguise
 public class HomeViewModel extends ViewModel {
-    private final MutableLiveData<ArrayList<DataModel>> data;
 
+    private MutableLiveData<String> currentName;
+
+    public MutableLiveData<String> getDataMod() {
+        if(currentName == null) {
+            currentName = new MutableLiveData<>();
+        }
+        return currentName;
+    }
+
+    private final MutableLiveData<ArrayList<DataModel>> data;
 
     private final ArrayList<DataModel> model;
 
@@ -130,86 +134,3 @@ public class HomeViewModel extends ViewModel {
         }
     }
 }
-/*
-@Override
-protected void onPostExecute(String result) { // onPostExecute - runs on the main thread.
-    super.onPostExecute(result);
-
-    @SuppressLint("SimpleDateFormat") SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-
-    // background thread to open and parse the downloaded json.
-    final Handler handler = new Handler();
-
-    new Thread(new Runnable() {
-        @Override
-        public void run() {
-            Log.v("LOG", "Inside of the new Runnable Thread!");
-
-            try {
-                File file = new File(requireContext().getFilesDir(), fmt.format(new Date()) + "_home.txt");
-                FileWriter fileWriter = new FileWriter(file);
-
-                // Write JSON response to disk.
-                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                bufferedWriter.write(result.toString());
-                bufferedWriter.close();
-
-                // Read JSON response from disk.
-                FileReader fileReader = new FileReader(file);
-                BufferedReader bufferedReader = new BufferedReader(fileReader);
-                StringBuilder stringBuilder = new StringBuilder();
-                String line = bufferedReader.readLine();
-
-                while(line != null) {
-                    stringBuilder.append(line).append("\n");
-                    line = bufferedReader.readLine();
-                }
-
-                bufferedReader.close();
-
-                // This is being populated from disk.
-                JSONObject jsonObject = new JSONObject(stringBuilder.toString());
-                JSONArray obj = jsonObject.getJSONArray("articles");
-
-                for(int i =  0; i < obj.length(); i++) {
-                    newsModel.add(new NewsModel(
-                            obj.getJSONObject(i).getJSONObject("source").getString("name"),
-                            obj.getJSONObject(i).getString("author"),
-                            obj.getJSONObject(i).getString("title"),
-                            obj.getJSONObject(i).getString("description"),
-                            obj.getJSONObject(i).getString("url"),
-                            obj.getJSONObject(i).getString("urlToImage"),
-                            obj.getJSONObject(i).getString("publishedAt"),
-                            obj.getJSONObject(i).getString("content")));
-                }
-            } catch (JSONException | IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            // Handler allows the UI to be updated.
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    RecyclerViewAdapter adapter = new RecyclerViewAdapter(newsModel);
-                    recyclerView.setAdapter(adapter);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-                    adapter.setListener(new RecyclerViewAdapter.Listener() {
-                        @Override
-                        public void onClick(int position) {
-                            Intent intent = new Intent(getActivity(), ContentActivity.class);
-                            Log.v("LOG", "[ July 17, 2024 onClick intent in HomeFragment was clicked ] => " + position);
-                            String url = newsModel.get(position).getUrlToImage();
-                            String content = newsModel.get(position).getContent();
-
-                            intent.putExtra("image", url);
-                            intent.putExtra("content", content);
-                            startActivity(intent);
-                        }
-                    });
-                }
-            });
-        }
-    }).start();
-}
- */

@@ -35,8 +35,11 @@ android {
 }
 
 dependencies {
+    implementation(libs.activity)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
+    implementation(libs.ext)
+    implementation(libs.lifecycle)
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.material)

@@ -1,7 +1,5 @@
 package edu.sfsu.times.adapter;
 
-import static edu.sfsu.times.sql.DatabaseHelper.insert;
-
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +23,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public interface Listener {
         void onClick(int position);
+    }
+
+    public void setListener(Listener listener) {
+        this.listener = listener;
     }
 
     private final ArrayList<DataModel> model;

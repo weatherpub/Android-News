@@ -41,15 +41,6 @@ public class HomeFragment extends Fragment {
 
         recyclerView = binding.rvHomeFragment;
 
-        // From  Android Documentation - [ example code ]
-        final Observer<DataModel> nameObserver = new Observer<DataModel>() {
-            @Override
-            public void onChanged(DataModel dataModel) {
-
-            }
-        };
-        // end [ example code ]
-
         adapter.setListener(new RecyclerViewAdapter.Listener() {
             @Override
             public void onClick(int position) {
@@ -59,54 +50,9 @@ public class HomeFragment extends Fragment {
                 getActivity().startActivity(intent);
             }
         });
-                /*
-                intent.putExtra("name", mod.observe(getViewLifecycleOwner(), dataModels -> ));
-                intent.putExtra("author", author);
-                intent.putExtra("title", title);
-                intent.putExtra("description", description);
-                intent.putExtra("url", url);
-                intent.putExtra("urlToImage", urlToImage);
-                intent.putExtra("publishedAt", publishedAt);
-                intent.putExtra("content", content);
-
-                // country.setText(data.get(0).getCountry());
-                // name.setText(data.get(0).getName());
-                // Log.i("LOG", "data.get(position).getName() -> " + dataModel.
-                    String name = data.get(position).getName();
-                    String author = data.get(position).getAuthor();
-                    String title = data.get(position).getTitle();
-                    String description = data.get(position).getDescription();
-                    String url = data.get(position).getUrl();
-                    String urlToImage = data.get(position).getUrlToImage();
-                    String publishedAt = data.get(position).getPublishedAt();
-                    String content = data.get(position).getContent();
-
-                    intent.putExtra("name", name);
-                    intent.putExtra("author", author);
-                    intent.putExtra("title", title);
-                    intent.putExtra("description", description);
-                    intent.putExtra("url", url);
-                    intent.putExtra("urlToImage", urlToImage);
-                    intent.putExtra("publishedAt", publishedAt);
-                    intent.putExtra("content", content);
-
-                getActivity().startActivity(intent);
-        */
-
-        homeViewModel.getData().observe(getViewLifecycleOwner(),
-                new Observer<ArrayList<DataModel>>() {
-                    @Override
-                    public void onChanged(ArrayList<DataModel> dataModels) {
-                        Log.i("LOG", "onChanged ");
-                    }
-                }
-        );
-
 
         // Update UI (RecyclerView)
         homeViewModel.getData().observe(getViewLifecycleOwner(), data -> {
-            // Log.i("LOG", "data.get(position).getName() -> " + data.get(0).getName());
-
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         });

@@ -26,22 +26,13 @@ import okhttp3.Response;
 // singleton in disguise
 public class HomeViewModel extends ViewModel {
 
-    private MutableLiveData<String> currentName;
-
-    public MutableLiveData<String> getDataMod() {
-        if(currentName == null) {
-            currentName = new MutableLiveData<>();
-        }
-        return currentName;
-    }
-
-    private final MutableLiveData<ArrayList<DataModel>> data;
+    private  MutableLiveData<ArrayList<DataModel>> data;
 
     private final ArrayList<DataModel> model;
 
     public HomeViewModel() {
-        String SOURCES = "bbc-news";
-        String QUERY = "nvidia";
+        String SOURCES = "bbc";
+        String QUERY = "harris";
 
         data = new MutableLiveData<>();
         DataModelViewModel dms = DataModelViewModel.getInstance();
@@ -52,11 +43,16 @@ public class HomeViewModel extends ViewModel {
          * https://newsapi.org/v2/top-headlines?sources=" + SOURCES + "&apiKey=6a5b4f0943e447a092cc59f7fbe690ef
          */
 
-        //new ViewModelAsyncTask().execute("https://newsapi.org/v2/everything?q=" + QUERY + "&apiKey=6e5104549c7f49b0b6e2ff7a036b9939");
-        new ViewModelAsyncTask().execute("https://newsapi.org/v2/top-headlines?sources=" + SOURCES + "&apiKey=6a5b4f0943e447a092cc59f7fbe690ef");
+        new ViewModelAsyncTask().execute("https://newsapi.org/v2/everything?q=" + QUERY + "&apiKey=6e5104549c7f49b0b6e2ff7a036b9939");
+        // new ViewModelAsyncTask().execute("https://newsapi.org/v2/top-headlines?sources=" + SOURCES + "&apiKey=6a5b4f0943e447a092cc59f7fbe690ef");
     }
 
-    public LiveData<ArrayList<DataModel>> getData() {
+    //public LiveData<ArrayList<DataModel>> getData() {
+    public MutableLiveData<ArrayList<DataModel>> getData() {
+        if(data == null) {
+            data = new MutableLiveData<>();
+        }
+
         return data;
     }
 
@@ -102,12 +98,10 @@ public class HomeViewModel extends ViewModel {
             }
         }
 
-
-        // this is the main ui
+        // Main UI
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-
 
             try {
                 SQLiteDatabase sd = null;
@@ -126,8 +120,8 @@ public class HomeViewModel extends ViewModel {
                             obj.getJSONObject(i).getString("publishedAt"),
                             obj.getJSONObject(i).getString("content")));
                 }
-                data.setValue(data.getValue());
-                //... or use data.setValue(model); to populate the liveData for the fragment
+                data.setValue(model);
+                // not this! data.setValue(data.getValue());
             } catch (JSONException | SQLException e) {
                 throw new RuntimeException(e);
             }

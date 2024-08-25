@@ -13,6 +13,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import edu.sfsu.times.databinding.ActivityMainBinding;
+import edu.sfsu.times.sql.DatabaseHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,9 +33,6 @@ public class MainActivity extends AppCompatActivity {
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
                 .build();
-
- //       spinner = (ProgressBar) findViewById(R.id.pb_progressbar);
- //       spinner.setVisibility(View.VISIBLE);
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);

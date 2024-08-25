@@ -47,8 +47,8 @@ public class HomeViewModel extends ViewModel {
         // new ViewModelAsyncTask().execute("https://newsapi.org/v2/top-headlines?sources=" + SOURCES + "&apiKey=6a5b4f0943e447a092cc59f7fbe690ef");
     }
 
-    //public LiveData<ArrayList<DataModel>> getData() {
-    public MutableLiveData<ArrayList<DataModel>> getData() {
+    public LiveData<ArrayList<DataModel>> getData() {
+    // public MutableLiveData<ArrayList<DataModel>> getData() {
         if(data == null) {
             data = new MutableLiveData<>();
         }
@@ -120,6 +120,8 @@ public class HomeViewModel extends ViewModel {
                             obj.getJSONObject(i).getString("publishedAt"),
                             obj.getJSONObject(i).getString("content")));
                 }
+
+                // pass the model to the ViewModel
                 data.setValue(model);
                 // not this! data.setValue(data.getValue());
             } catch (JSONException | SQLException e) {

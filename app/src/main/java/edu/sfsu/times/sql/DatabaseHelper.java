@@ -7,9 +7,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
+
 import java.util.ArrayList;
 
 import edu.sfsu.times.model.DataModel;
+import edu.sfsu.times.ui.home.HomeViewModel;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     ArrayList<DataModel> dm;
@@ -54,9 +57,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     */
 
+
     // a helper method to update the  model
     public ArrayList<DataModel> updateModel(ArrayList<DataModel> dataModel) {
-
         dataModel.add(new DataModel("Business in America", "Patrick Mims", "Winning is Everything", "A great book about investing and making money.", "http://www.amazon.com/business", "https://www.url.com", "2024", "456 Pages."));
         dataModel.add(new DataModel("Michael", "Mills", "Money is Necessary", "All about money in today's world", "http://money.com", "https://www.url.com", "2222", "something for everyone"));
         // dataModel.add...

@@ -35,6 +35,10 @@ android {
 }
 
 dependencies {
+    val roomVersion = "2.6.1"
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.ext.junit)
+    annotationProcessor(libs.room.compiler)
     implementation(libs.activity)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
@@ -47,7 +51,17 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.okhttp)
     implementation(libs.picasso)
+    implementation(libs.room.common)
+    implementation(libs.room.guava)     // optional - Guava support for Room, including Optional and ListenableFuture
+    implementation(libs.room.ktx)       // optional - Kotlin Extensions and Coroutines support for Room
+    implementation(libs.room.paging)    // optional - Paging 3 Integration
+    implementation(libs.room.runtime)
+    implementation(libs.room.rxjava2)   // optional - RxJava2 support for Room
+    implementation(libs.room.rxjava3)   // optional - RxJava3 support for Room
     testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+    testImplementation(libs.room.testing) // optional - Test helpers
+    // To use Kotlin annotation processing tool (kapt)
+    // kapt("androidx.room:room-compiler:$roomVersion")
+    // To use Kotlin Symbol Processing (KSP)
+    // ksp("androidx.room:room-compiler:$roomVersion")
 }

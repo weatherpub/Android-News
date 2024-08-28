@@ -1,10 +1,12 @@
 package edu.sfsu.times.ui.notifications;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.os.HandlerThread;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.w3c.dom.Text;
+
 import edu.sfsu.times.R;
 import edu.sfsu.times.databinding.FragmentNotificationsBinding;
 import edu.sfsu.times.sql.DatabaseHelper;
@@ -25,9 +29,12 @@ public class NotificationsFragment extends Fragment {
     private FragmentNotificationsBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //NotificationsViewModel notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
+        NotificationsViewModel notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
+        // return inflater.inflate(R.layout.fragment_notifications, container, false);
 
-        // getContext() - return the context this fragment is currently associated with.
+        binding = FragmentNotificationsBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
         SQLiteOpenHelper helper = new DatabaseHelper(getContext());
 
         try {
@@ -47,43 +54,32 @@ public class NotificationsFragment extends Fragment {
                 String published_column = cursor.getString(6);
                 String content_column = cursor.getString(7);
 
-                TextView name = (TextView) getActivity().findViewById(R.id.tv_name);
-                /*
-                TextView author = (TextView) getActivity().findViewById(R.id.tv_author);
-                TextView title = (TextView) getActivity().findViewById(R.id.tv_title);
-                TextView description = (TextView) getActivity().findViewById(R.id.tv_description);
-                TextView url = (TextView) getActivity().findViewById(R.id.tv_url);
-                TextView url_to_img = (TextView) getActivity().findViewById(R.id.tv_url_to_image);
-                TextView published = (TextView) getActivity().findViewById(R.id.tv_published_at);
-                TextView content = (TextView) getActivity().findViewById(R.id.tv_content);
-                */
+                TextView name = (TextView) root.findViewById(R.id.tv_name);
+                TextView author = (TextView) root.findViewById(R.id.tv_author);
+                TextView title = (TextView) root.findViewById(R.id.tv_title);
+                TextView description = (TextView) root.findViewById(R.id.tv_description);
+                TextView url = (TextView) root.findViewById(R.id.tv_url);
+                TextView url_to_img = (TextView) root.findViewById(R.id.tv_url_to_image);
+                TextView published = (TextView) root.findViewById(R.id.tv_published_at);
+                TextView content = (TextView) root.findViewById(R.id.tv_content);
+
+                name.setText(name_column);
+                author.setText(author_column);
+                title.setText(title_column);
+                description.setText(description_column);
+                url.setText(url_column);
+                published.setText(published_column);
+                url_to_img.setText(url_to_img_column);
+                content.setText(content_column);
 
                 Log.i("LOG", "tv_name -> " + name_column);
-                Log.i("LOG", "tv_author-> " + author_column);
+                Log.i("LOG", "tv_author -> " + author_column);
                 Log.i("LOG", "tv_title -> " + title_column);
                 Log.i("LOG", "tv_description -> " + description_column);
                 Log.i("LOG", "tv_url -> " + url_column);
                 Log.i("LOG", "tv_url_to_image -> " + url_to_img_column);
                 Log.i("LOG", "tv_published -> " + published_column);
                 Log.i("LOG", "tv_content -> " + content_column);
-
-                /*
-                name.setText(name_column);
-                author.setText(author_column);
-                title.setText(title_column);
-                description.setText(description_column);
-                url.setText(url_column);
-                url_to_img.setText(name_column);
-                content.setText(name_column);
-
-                author.setText(author_column);
-                title.setText(title_column);
-                description.setText(description_column);
-                url.setText(url_column);
-                url_to_img.setText(url_to_img_column);
-                published.setText(published_column);
-                content.setText(content_column);
-                */
             }
             cursor.close();
             db.close();
@@ -92,12 +88,10 @@ public class NotificationsFragment extends Fragment {
             toast.show();
         }
 
-        binding = FragmentNotificationsBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
         // final TextView textView = binding.textNotifications;
         final TextView textView = binding.tvName;
-        // notificationsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        // notificationsViewModel.getData().observe(getViewLifecycleOwner(), textView::setText()); // <- another problem here. comment this line and line #28 to debug
+       notificationsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText); // <- another problem here. comment this line and line #28 to debug
         return root;
     }
 

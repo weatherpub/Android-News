@@ -32,7 +32,7 @@ public class HomeViewModel extends ViewModel {
 
     public HomeViewModel() {
         String SOURCES = "bbc";
-        String QUERY = "harris";
+        String QUERY = "economy";
 
         data = new MutableLiveData<>();
         DataModelViewModel dms = DataModelViewModel.getInstance();

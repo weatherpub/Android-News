@@ -1,14 +1,17 @@
 package edu.sfsu.times.ui.notifications;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +38,8 @@ public class NotificationsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        Context context = getContext();
+
         RecyclerViewAdapter adapter = new RecyclerViewAdapter();
 
         NotificationsViewModel notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
@@ -43,10 +48,15 @@ public class NotificationsFragment extends Fragment {
         binding = FragmentNotificationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        SQLiteOpenHelper helper = new DatabaseHelper(getContext());
+        Log.i("LOG", "Inside of run() 1");
+
+        SQLiteOpenHelper helper = new DatabaseHelper(context);
+
+        Log.i("LOG", "Inside of run() 2");
 
         // pull data from the DatabaseHelper()
         try {
+            Log.i("LOG", "Inside of run() 3");
             int i = 0;
             SQLiteDatabase db = helper.getReadableDatabase();
 
@@ -64,8 +74,14 @@ public class NotificationsFragment extends Fragment {
             TextView published = (TextView) root.findViewById(R.id.tv_published_at);
             TextView content = (TextView) root.findViewById(R.id.tv_content);
 
+            int j = 0;
+            int k = 0;
             if(cursor.moveToFirst()) {
+                Log.i("LOG", "k-> " + k);
+                k = k + 1;
                 do {
+                    Log.i("LOG", "j-> " + j);
+                    j = j + 1;
                     String name_column = cursor.getString(0);
                     String author_column = cursor.getString(1);
                     String title_column = cursor.getString(2);
@@ -83,7 +99,7 @@ public class NotificationsFragment extends Fragment {
                     url.setText(url_column);
                     published.setText(published_column);
                     url_to_img.setText(url_to_img_column);
-                    content.setText(content_column);
+                    content.setText(cursor.getString(7));
                 } while(cursor.moveToNext());
             }
             cursor.close();
@@ -94,10 +110,12 @@ public class NotificationsFragment extends Fragment {
         }
 
         /*
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        */
+            Need to do more research on this.
+            Would like db results in a grid.
 
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        */
         final TextView textView = binding.tvName;
         // notificationsViewModel.getData().observe(getViewLifecycleOwner(), textView::setText()); // <- another problem here. comment this line and line #28 to debug
         notificationsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText); // <- another problem here. comment this line and line #28 to debug

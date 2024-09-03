@@ -63,6 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         dataModel.add(new DataModel("Business in America", "Patrick Mims", "Winning is Everything.", "A great book about investing and making money.", "amazon.com", "https://media.wired.com/photos/66a56f21bf2909f08a634953/191:100/w_1280,c_limit/Crypto-Bros-Business-2162975355.jpg", "2024", "456 Pages."));
         dataModel.add(new DataModel("Getting More Money", "Danny Glover", "Money is Necessary.", "All about money in today's world", "money.com", "https://i.blogs.es/f8f908/mining-iran/840_560.jpeg", "2222", "something for everyone"));
         dataModel.add(new DataModel("Simple Mind Simple Life", "Benjamin Richards", "Are women necessary?", "It's a man's world.", "feminism.org", "https://heise.cloudimg.io/bound/1200x1200/q85.png-lossy-85.webp-lossy-85.foil1/_www-heise-de_/imgs/18/4/6/5/3/7/2/3/2024-03-12-Bing_Designer-Phishing-3-3840px-13692f75f2fcb4d0.png", "2222", "something for everyone"));
+        Log.i("LOG", "dm.size() -> " + dm.size());
         // dataModel.add...
 
         return dataModel;
@@ -72,6 +73,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         dm = new ArrayList<>();
+        Log.i("Log", "DatabaseHelper initialized...");
 
         sqLiteDatabase.execSQL("CREATE TABLE ARTICLES ("
                 + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -85,16 +87,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + "CONTENT TEXT);");
 
         Log.i("LOG", "dm -> " + dm);
+
+        // insert test data into DataModel
+        // this shows up in the "notification" icon
+        dm.add(new DataModel("Business in America", "Patrick Mims", "Winning is Everything.", "A great book about investing and making money.", "amazon.com", "https://media.wired.com/photos/66a56f21bf2909f08a634953/191:100/w_1280,c_limit/Crypto-Bros-Business-2162975355.jpg", "2024", "456 Pages."));
+        dm.add(new DataModel("Simple Mind Simple Life", "Benjamin Richards", "Are women necessary?", "It's a man's world.", "feminism.org", "https://heise.cloudimg.io/bound/1200x1200/q85.png-lossy-85.webp-lossy-85.foil1/_www-heise-de_/imgs/18/4/6/5/3/7/2/3/2024-03-12-Bing_Designer-Phishing-3-3840px-13692f75f2fcb4d0.png", "2222", "something for everyone"));
+        dm.add(new DataModel("Getting More Money", "Danny Glover", "Money is Necessary.", "All about money in today's world", "money.com", "https://i.blogs.es/f8f908/mining-iran/840_560.jpeg", "2222", "something for everyone"));
+        Log.i("LOG", "dm.size() " + dm.size());
         /*
         Log.i("LOG", "dm -> " + dm.get(1).getAuthor());
         Log.i("LOG", "dm -> " + dm.get(2).getAuthor());
          */
 
-        insert(sqLiteDatabase, updateModel(dm)); // <- updateModel() returns the models from the helper method.
+        insertArticle(sqLiteDatabase, dm); // <- updateModel() returns the models from the helper method.
     }
 
-    private static int counter = 0;
-    public static void insert(SQLiteDatabase sqLiteDatabase, ArrayList<DataModel> model) {
+    public static void insertArticle(SQLiteDatabase sqLiteDatabase, ArrayList<DataModel> model) {
         Log.i("LOG", "inside of insert!");
         ContentValues cv = new ContentValues();
 
@@ -107,11 +115,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cv.put("URL_TO_IMAGE", m.getUrlToImage());
             cv.put("PUBLISHED_AT", m.getPublishedAt());
             cv.put("CONTENT", m.getContent());
+            sqLiteDatabase.insert(DB_TABLE, null, cv);
         }
-        sqLiteDatabase.insert(DB_TABLE, null, cv);
 
-        Log.i("LOG", "Inside of insert method 1");
-        Log.i("LOG", "Inside of insert method 2" + model.size());
+        Log.i("LOG", "Inside of insert method 3");
+        Log.i("LOG", "Inside of insert method 4" + model.size());
 
         /*
         cv.put("NAME", model.get(counter).getName());

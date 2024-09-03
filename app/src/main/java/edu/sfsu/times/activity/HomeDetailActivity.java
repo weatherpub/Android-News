@@ -54,7 +54,9 @@ public class HomeDetailActivity extends AppCompatActivity {
             public void onChanged(ArrayList<DataModel> dataModels) {
                 if(dataModel == null) {
                     dataModel = dataModels;
-                    Picasso.get().load(dataModel.get(position).getUrlToImage()).into(imgView);
+
+                    Picasso.get().load(dataModel.get(position).getUrlToImage()).into(imgView); // see Picasso documentation
+
                     tv_detail_name.setText(dataModel.get(position).getName());
                     tv_detail_author.setText(dataModel.get(position).getAuthor());
                     tv_detail_title.setText(dataModel.get(position).getTitle());

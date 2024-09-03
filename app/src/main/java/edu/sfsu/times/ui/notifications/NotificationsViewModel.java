@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class NotificationsViewModel extends ViewModel {
-    private final Handler handler;
 
     private final MutableLiveData<String> mText;
 
@@ -18,7 +17,7 @@ public class NotificationsViewModel extends ViewModel {
 
         HandlerThread workerThread = new HandlerThread("WorkerThread");
         workerThread.start();
-        handler = new Handler(workerThread.getLooper());
+        Handler handler = new Handler(workerThread.getLooper());
 
         mText = new MutableLiveData<>();
         mText.setValue("This is notifications fragment");

@@ -32,7 +32,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private final ArrayList<DataModel> model;
 
     public RecyclerViewAdapter() {
-        DataModelViewModel dms = DataModelViewModel.getInstance();
+        DataModelViewModel dms = DataModelViewModel.getInstance(); // request an object from the singleton.
         model = dms.getData();
     }
 

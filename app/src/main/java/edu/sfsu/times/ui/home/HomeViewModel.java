@@ -27,7 +27,6 @@ import okhttp3.Response;
 public class HomeViewModel extends ViewModel {
 
     private  MutableLiveData<ArrayList<DataModel>> data;
-
     private final ArrayList<DataModel> model;
 
     public HomeViewModel() {
@@ -49,9 +48,12 @@ public class HomeViewModel extends ViewModel {
 
     public LiveData<ArrayList<DataModel>> getData() {
     // public MutableLiveData<ArrayList<DataModel>> getData() {
+        Log.i("LOG", "LiveData-> " + data);
         if(data == null) {
             data = new MutableLiveData<>();
         }
+
+        Log.i("LOG", "LiveData-> after new mutableLiveData<>() " + data);
 
         return data;
     }

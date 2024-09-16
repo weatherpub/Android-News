@@ -35,7 +35,6 @@ public class HomeFragment extends Fragment {
         HomeViewModel homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-
         View root = binding.getRoot();
 
         recyclerView = binding.rvHomeFragment;
